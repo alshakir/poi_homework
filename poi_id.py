@@ -1,63 +1,9 @@
 #!/usr/bin/python
 
-
-#%% cell 1
 import sys
 import pickle
+sys.path.append("../tools/")
 
-print 'End of cell 1'
-
-
-# the following line should be commented if running windows 10
-#sys.path.append("../tools/")
-
-#%% cell 2
-# the following code is meant for windows10 OS to add the tools directory to the Path
-# it should be commented if running Linux
-import os
-dirName = os.path.dirname(__file__)
-pParent = dirName[:dirName.rindex('\\')]
-toolsPath = pParent+'\\tools'
-sys.path.append(toolsPath)
-#---------- End of Windows 10 code
-print 'End of cell 2'
-
-
-#%% cell 3
-sys.path =   sys.path[:15]
-tools = "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\tools"
-testerPath =  "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\final_project"
-
-sys.path.append(tools)
-sys.path.append(testerPath)
-count = 0
-for i in sys.path:
-    print count, '--' ,i
-    count +=1
-
-print "end of cell 3"
- 
-#%% trials and tests
-print os.getcwd()
-
-import pprint
-
-pp = pprint.PrettyPrinter(4)
-
-#pp.pprint(data_dict)
-
-
-import pandas as pd 
-import numpy as np 
-
-df = pd.DataFrame.from_dict(data_dict)
-print df[:4]["WASAFF GEORGE"]
-
-df.dropna(axis=0,how='any')
-
-
-print df
-#%% cell 4
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
 
@@ -67,15 +13,9 @@ from tester import dump_classifier_and_data
 features_list = ['poi','salary'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
-with open(testerPath + "\\final_project_dataset.pkl", "r") as data_file:
+with open("final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
 
-
-print 'End of cell 4'
-
-
-
-#%% cell 5
 ### Task 2: Remove outliers
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
@@ -84,25 +24,6 @@ my_dataset = data_dict
 ### Extract features and labels from dataset for local testing
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
-
-print len(data_dict)
-print my_dataset
-print
-print
-print
-print '****************'
-print 
-
-
-print data
-print len(data)
-
-print labels
-print features
-print 'End of cell 5'
-
-
-
 
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
