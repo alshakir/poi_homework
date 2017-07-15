@@ -88,7 +88,7 @@ features_list = ['poi','salary','total_payments', 'exercised_stock_options',
 ### Load the dictionary containing the dataset
 with open(testerPath + "\\final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
-
+    data_dict.pop('TOTAL')
 
 print 'End of cell 4'
 
@@ -103,8 +103,8 @@ reload(feature_format)
 my_dataset = data_dict
 
 ### Extract features and labels from dataset for local testing
-data = featureFormat(my_dataset, features_list, sort_keys = True)
-labels, features = targetFeatureSplit(data)
+data = feature_format.featureFormat(my_dataset, features_list, sort_keys = True)
+labels, features = feature_format.targetFeatureSplit(data)
 
 print len(data_dict)
 print my_dataset
@@ -127,6 +127,9 @@ print 'End of cell 5'
 
 
 
+
+#%% cell 6
+
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
 ### Note that if you want to do PCA or other multi-stage operations,
@@ -136,6 +139,8 @@ print 'End of cell 5'
 # Provided to give you a starting point. Try a variety of classifiers.
 from sklearn.naive_bayes import GaussianNB
 clf = GaussianNB()
+
+
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -148,6 +153,26 @@ clf = GaussianNB()
 from sklearn.cross_validation import train_test_split
 features_train, features_test, labels_train, labels_test = \
     train_test_split(features, labels, test_size=0.3, random_state=42)
+
+
+clf.fit(features_train,labels_train)
+
+pred = clf.predict(features_test)
+
+
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
+
+score = accuracy_score(labels_test,pred)
+
+prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+print score
+print '----------------'
+
+print prec_reca_f
+print 'end of cell 6'
+
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
