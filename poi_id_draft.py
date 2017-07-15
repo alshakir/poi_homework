@@ -15,14 +15,28 @@ print 'End of cell 1'
 # the following code is meant for windows10 OS to add the tools directory to the Path
 # it should be commented if running Linux
 import os
-dirName = os.path.dirname(__file__)
+try:
+    #This will not work on interactive env. like Jupyter
+    dirName = os.path.dirname(__file__)
+except NameError:  # We are the main [Jupyter]  script, not a module
+    import sys
+    dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
+
 pParent = dirName[:dirName.rindex('\\')]
 toolsPath = pParent+'\\tools'
 sys.path.append(toolsPath)
 #---------- End of Windows 10 code
 print 'End of cell 2'
 
+#%% 
+print sys.path
+print sys.argv
+count = 1
+for i in data_dict.keys():
+    print i, count
+    count+=1
 
+print data_dict['TOTAL']['salary']
 #%% cell 3
 sys.path =   sys.path[:15]
 tools = "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\tools"
@@ -57,14 +71,19 @@ df.dropna(axis=0,how='any')
 
 
 print df
+
 #%% cell 4
-from feature_format import featureFormat, targetFeatureSplit
+#from feature_format import featureFormat, targetFeatureSplit
+
+import feature_format
 from tester import dump_classifier_and_data
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','salary'] # You will need to use more features
+features_list = ['poi','salary','total_payments', 'exercised_stock_options',
+'bonus', 'restricted_stock', 'restricted_stock_deferred', 'total_stock_value',
+'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
 with open(testerPath + "\\final_project_dataset.pkl", "r") as data_file:
@@ -76,6 +95,8 @@ print 'End of cell 4'
 
 
 #%% cell 5
+
+reload(feature_format)
 ### Task 2: Remove outliers
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
@@ -97,6 +118,8 @@ print
 print data
 print len(data)
 
+
+print len(labels),'^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
 print labels
 print features
 print 'End of cell 5'
