@@ -22,13 +22,23 @@ except NameError:  # We are the main [Jupyter]  script, not a module
     import sys
     dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
 
-pParent = dirName[:dirName.rindex('\\')]
-toolsPath = pParent+'\\tools'
+#this is for windows10..to be commented in mac
+pParent = dirName[:dirName.rindex('\\')+1]
+
+# this is for mac .. to be commented in windows10
+pParent = dirName[:dirName.rindex('/')+1]
+
+
+toolsPath = pParent+'tools'
 sys.path.append(toolsPath)
 #---------- End of Windows 10 code
+
+
+
+
 print 'End of cell 2'
 
-#%% 
+#%% test cell
 print sys.path
 print sys.argv
 count = 1
@@ -37,10 +47,23 @@ for i in data_dict.keys():
     count+=1
 
 print data_dict['TOTAL']['salary']
-#%% cell 3
+
+
+
+#%% cell 3 
+# this cell is specific for running the code in the REPL interactive like jupyter
 sys.path =   sys.path[:15]
+
+#these links are for my windows 10 device..to be commented when using mac..
+#every user should use the exact location on his device
 tools = "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\tools"
 testerPath =  "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\final_project"
+
+
+# these links are for the mac
+tools = '/Users/shakiralharthi/Documents/ud120-projects-master/tools'
+testerPath =  '/Users/shakiralharthi/Documents/ud120-projects-master/final_project'
+
 
 sys.path.append(tools)
 sys.path.append(testerPath)
