@@ -52,12 +52,13 @@ print data_dict['TOTAL']['salary']
 
 #%% cell 3 
 # this cell is specific for running the code in the REPL interactive like jupyter
+#so it should be removed when submitting the project
 sys.path =   sys.path[:15]
 
 #these links are for my windows 10 device..to be commented when using mac..
 #every user should use the exact location on his device
-tools = "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\tools"
-testerPath =  "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\final_project"
+# tools = "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\tools"
+# testerPath =  "C:\\Users\\alsha\\Dropbox\\DAND_nanodegree\\machineLearning_miniproject\\ud120-projects\\final_project"
 
 
 # these links are for the mac
