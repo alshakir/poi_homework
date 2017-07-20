@@ -62,8 +62,8 @@ sys.path =   sys.path[:15]
 
 
 # these links are for the mac
-tools = '/Users/shakiralharthi/Documents/ud120-projects-master/tools'
-testerPath =  '/Users/shakiralharthi/Documents/ud120-projects-master/final_project'
+tools = '/Users/shakiralharthi/Documents/ud120-projects-master/tools/'
+testerPath =  '/Users/shakiralharthi/Documents/ud120-projects-master/final_project/'
 
 
 sys.path.append(tools)
@@ -110,7 +110,7 @@ features_list = ['poi','salary','total_payments', 'exercised_stock_options',
 'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
-with open(testerPath + "\\final_project_dataset.pkl", "r") as data_file:
+with open(testerPath + "final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
     data_dict.pop('TOTAL')
 
@@ -185,6 +185,7 @@ pred = clf.predict(features_test)
 
 
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import recall_score, precision_score
 
 
 score = accuracy_score(labels_test,pred)
@@ -198,6 +199,26 @@ print prec_reca_f
 print 'end of cell 6'
 
 
+print recall_score(labels_test,pred), ' is the recall'
+print precision_score(labels_test, pred), 'is the precision'
+
+
+
+print labels_test[7]
+print pred[7]
+counter = 0
+wrongcount=0
+for i in labels_test:
+    if i == pred[counter]:
+        print i, '****', pred[count]
+        print type(i),'type***', type(pred[count])
+        print counter
+    else:
+        wrongcount+=1
+    counter+=1
+
+print counter
+print 'wrong count = ', wrongcount
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
 ### that the version of poi_id.py that you submit can be run on its own and
