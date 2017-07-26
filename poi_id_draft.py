@@ -208,13 +208,20 @@ print labels_test[7]
 print pred[7]
 counter = 0
 wrongcount=0
+
+cc = 1
+
 for i in labels_test:
-    if i == pred[counter]:
-        print i, '****', pred[count]
-        print type(i),'type***', type(pred[count])
-        print counter
-    else:
-        wrongcount+=1
+    if i == 1 or pred[counter]== 1 :
+        print 'i = ', i,  ' ___pred = ', pred[counter]
+        print cc
+        cc+=1
+    # if i == pred[counter]:
+    #     print i, '****', pred[counter]
+    #     print type(i),'type***', type(pred[counter])
+    #     print counter
+    # else:
+    #     wrongcount+=1
     counter+=1
 
 print counter
