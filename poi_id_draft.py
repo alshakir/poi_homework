@@ -232,3 +232,132 @@ print 'wrong count = ', wrongcount
 ### generates the necessary .pkl files for validating your results.
 
 dump_classifier_and_data(clf, my_dataset, features_list)
+
+print 'end of cell 6'
+
+#%% cell 7
+
+### Task 4: Try a varity of classifiers
+### Please name your classifier clf for easy export below.
+### Note that if you want to do PCA or other multi-stage operations,
+### you'll need to use Pipelines. For more info:
+### http://scikit-learn.org/stable/modules/pipeline.html
+
+# Provided to give you a starting point. Try a variety of classifiers.
+def useGaussianNB():
+    from sklearn.naive_bayes import GaussianNB
+    clf = GaussianNB()
+
+
+
+    clf.fit(features_train,labels_train)
+
+    pred = clf.predict(features_test)
+
+
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
+
+
+    score = accuracy_score(labels_test,pred)
+
+    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+    print score
+    print '----------------'
+
+    print prec_reca_f
+    print 'end of cell 6'
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+
+
+    print labels_test[7]
+    print pred[7]
+    counter = 0
+    wrongcount=0
+
+    cc = 1
+
+    for i in labels_test:
+        if i == 1 or pred[counter]== 1 :
+            print 'i = ', i,  ' ___pred = ', pred[counter]
+            print cc
+            cc+=1
+        # if i == pred[counter]:
+        #     print i, '****', pred[counter]
+        #     print type(i),'type***', type(pred[counter])
+        #     print counter
+        # else:
+        #     wrongcount+=1
+        counter+=1
+
+    print counter
+    print 'wrong count = ', wrongcount
+
+
+print 'end of cell 7'
+#%% cell 8.
+# svm classifier
+
+def useSVM():
+    print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
+    from sklearn import svm
+
+    clf = svm.SVC()
+
+    clf.fit(features_train,labels_train)
+
+    pred = clf.predict(features_test)
+
+
+    score = accuracy_score(labels_test,pred)
+
+    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+    print score
+    print '----------------'
+
+    print prec_reca_f
+    print 'end of cell 6'
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+
+
+
+    counter = 0
+    wrongcount=0
+
+    cc = 1
+
+    for i in labels_test:
+        if i == 1 or pred[counter]== 1 :
+            print 'i = ', i,  ' ___pred = ', pred[counter]
+            print cc
+            cc+=1
+        # if i == pred[counter]:
+        #     print i, '****', pred[counter]
+        #     print type(i),'type***', type(pred[counter])
+        #     print counter
+        # else:
+        #     wrongcount+=1
+        counter+=1
+
+    print counter
+    print 'wrong count = ', wrongcount
+
+print ' end of cell 8 '
+
+
+#%% cell testing all classifiers
+
+useGaussianNB()
+useSVM()
+
+print 'end of cell testing all classifiers'
