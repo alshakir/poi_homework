@@ -355,9 +355,61 @@ def useSVM():
 print ' end of cell 8 '
 
 
+
+#%% cell 9
+
+def useDTClf():
+    from sklearn.tree import DecisionTreeClassifier 
+
+    clf = DecisionTreeClassifier()
+    clf.fit(features_train,labels_train)
+
+    pred = clf.predict(features_test)
+
+
+    score = accuracy_score(labels_test,pred)
+
+    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+    print score
+    print '----------------'
+
+    print prec_reca_f
+    print 'end of cell 6'
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+
+
+
+    counter = 0
+    wrongcount=0
+
+    cc = 1
+
+    for i in labels_test:
+        if i == 1 or pred[counter]== 1 :
+            print 'i = ', i,  ' ___pred = ', pred[counter]
+            print cc
+            cc+=1
+        # if i == pred[counter]:
+        #     print i, '****', pred[counter]
+        #     print type(i),'type***', type(pred[counter])
+        #     print counter
+        # else:
+        #     wrongcount+=1
+        counter+=1
+
+    print counter
+    print 'wrong count = ', wrongcount
+
+
+print 'end of cell 9'
 #%% cell testing all classifiers
 
 useGaussianNB()
 useSVM()
-
+useDTClf()
 print 'end of cell testing all classifiers'
