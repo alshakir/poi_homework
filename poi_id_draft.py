@@ -76,25 +76,35 @@ for i in sys.path:
 print "end of cell 3"
  
 #%% trials and tests
-print os.getcwd()
+# print os.getcwd()
 
-import pprint
+# import pprint
 
-pp = pprint.PrettyPrinter(4)
+# pp = pprint.PrettyPrinter(4)
 
-#pp.pprint(data_dict)
+# #pp.pprint(data_dict)
 
 
-import pandas as pd 
+# import pandas as pd 
+# import numpy as np 
+
+# df = pd.DataFrame.from_dict(data_dict)
+# print df[:4]["WASAFF GEORGE"]
+
+# df.dropna(axis=0,how='any')
+
+
+# print df
+
 import numpy as np 
+from sklearn.model_selection import StratifiedKFold
 
-df = pd.DataFrame.from_dict(data_dict)
-print df[:4]["WASAFF GEORGE"]
-
-df.dropna(axis=0,how='any')
-
-
-print df
+X = np.ones(10)
+print X
+y = [0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
+skf = StratifiedKFold(n_splits=3)
+for train, test in skf.split(X, y):
+     print("%s %s" % (train, test))
 
 #%% cell 4
 #from feature_format import featureFormat, targetFeatureSplit
