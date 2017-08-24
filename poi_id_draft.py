@@ -77,14 +77,9 @@ print "end of cell 3"
  
 #%% trials and tests
 # print os.getcwd()
-
 # import pprint
-
 # pp = pprint.PrettyPrinter(4)
-
 # #pp.pprint(data_dict)
-
-
 # import pandas as pd 
 # import numpy as np 
 
@@ -92,7 +87,6 @@ print "end of cell 3"
 # print df[:4]["WASAFF GEORGE"]
 
 # df.dropna(axis=0,how='any')
-
 
 # print df
 
@@ -104,7 +98,10 @@ print X
 y = [0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
 skf = StratifiedKFold(n_splits=3)
 for train, test in skf.split(X, y):
-     print("%s %s" % (train, test))
+    print 'train: ', train
+    print 'test: ', test
+    print("%s %s" % (train, test))
+    print '----'
 
 #%% cell 4
 #from feature_format import featureFormat, targetFeatureSplit
@@ -255,11 +252,12 @@ print 'end of cell 6'
 
 # Provided to give you a starting point. Try a variety of classifiers.
 def useGaussianNB():
+    print "This is the useGaussianNB() method"
     from sklearn.naive_bayes import GaussianNB
     clf = GaussianNB()
 
 
-
+    
     clf.fit(features_train,labels_train)
 
     pred = clf.predict(features_test)
@@ -314,6 +312,8 @@ print 'end of cell 7'
 # svm classifier
 
 def useSVM():
+    
+    print "This is the useSVM() method"
     print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
     from sklearn import svm
 
@@ -369,9 +369,20 @@ print ' end of cell 8 '
 #%% cell 9
 
 def useDTClf():
+    
+    print "This is the useDTClf() method"
+    from sklearn import tree
     from sklearn.tree import DecisionTreeClassifier 
 
-    clf = DecisionTreeClassifier()
+    #clf = DecisionTreeClassifier(max_depth=1)
+
+    param = {'max_depth': [1,2,3,4,5,6,7,8,9],
+    'min_samples_split':[2,3,4,5,6,7,8,9],
+    'min_samples_leaf':[1,2,3,4,5,6,7,8,9]}
+    from sklearn.model_selection import GridSearchCV
+    clf = GridSearchCV(DecisionTreeClassifier(), param)
+
+
     clf.fit(features_train,labels_train)
 
     pred = clf.predict(features_test)
@@ -415,6 +426,10 @@ def useDTClf():
     print counter
     print 'wrong count = ', wrongcount
 
+    # import graphviz
+    # dot_data = tree.export_graphviz(clf, out_file=None) 
+    # graph = graphviz.Source(dot_data) 
+    # graph.render("poi") 
 
 print 'end of cell 9'
 #%% cell testing all classifiers
@@ -423,3 +438,7 @@ useGaussianNB()
 useSVM()
 useDTClf()
 print 'end of cell testing all classifiers'
+
+
+#%%
+useDTClf()
