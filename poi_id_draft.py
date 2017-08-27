@@ -23,7 +23,7 @@ except NameError:  # We are the main [Jupyter]  script, not a module
     dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
 
 #this is for windows10..to be commented in mac
-pParent = dirName[:dirName.rindex('\\')+1]
+#pParent = dirName[:dirName.rindex('\\')+1]
 
 # this is for mac .. to be commented in windows10
 pParent = dirName[:dirName.rindex('/')+1]
@@ -137,7 +137,7 @@ my_dataset = data_dict
 data = feature_format.featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = feature_format.targetFeatureSplit(data)
 
-print len(data_dict)
+print 'length of data_dict: ',len(data_dict)
 print my_dataset
 print
 print
@@ -147,11 +147,15 @@ print
 
 
 print data
-print len(data)
+print 'length of data',len(data)
 
 
-print len(labels),'^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
+print 'length of labels : ', len(labels),'^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
+print 'now following is lables: ......\n\n\n'
 print labels
+
+print 'length of features :' , len(features)
+print 'Now following is features: ...\n\n\n'
 print features
 print 'End of cell 5'
 
@@ -317,7 +321,14 @@ def useSVM():
     print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
     from sklearn import svm
 
-    clf = svm.SVC()
+    #clf = svm.SVC()
+
+    param = {'kernel': ['linear', 'rbf','poly', 'rbf', 'sigmoid'] ,
+    'C':[1,2,3,4,5,6,7,8,9,10, 300,5000],
+    'decision_function_shape' : ['ovo', 'ovr']
+    }
+    from sklearn.model_selection import GridSearchCV
+    clf = GridSearchCV(svm.SVC(max_iter=8000000), param)
 
     clf.fit(features_train,labels_train)
 
@@ -361,6 +372,14 @@ def useSVM():
 
     print counter
     print 'wrong count = ', wrongcount
+
+
+
+
+    print 'best params = ', clf.best_params_
+    print 'best estimator = ', clf.best_estimator_
+    print 'best score = ', clf.best_score_
+    print 'best index = ', clf.best_index_
 
 print ' end of cell 8 '
 
@@ -404,7 +423,10 @@ def useDTClf():
 
 
 
-
+    print 'best params = ', clf.best_params_
+    print 'best estimator = ', clf.best_estimator_
+    print 'best score = ', clf.best_score_
+    print 'best index = ', clf.best_index_
     counter = 0
     wrongcount=0
 
@@ -441,4 +463,97 @@ print 'end of cell testing all classifiers'
 
 
 #%%
-useDTClf()
+
+useGaussianNB()
+
+
+
+
+#%% cell 11
+# testing gaussianNB with kfold
+
+def useGaussianNBKfold():
+    print "This is the useGaussianNBKfold() method"
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.model_selection import KFold,StratifiedKFold
+
+    from sklearn.cross_validation import cross_val_score
+
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
+    import numpy as np
+
+
+    kf = KFold(n_splits=9,shuffle=True)
+    clf = GaussianNB()
+    print type(features)
+
+    print '-----------\n\n\n'
+
+    print cross_val_score(clf,features,labels,scoring=None,cv=7)
+    print '-----------\n\n\n'
+    print '-----------\n\n\n'
+    
+
+    f = np.array(features)
+    l = np.array(labels)
+    print f.shape
+    print l.shape
+    for train_index, test_index in kf.split(features):
+        # print train_index
+        # print '====='
+        # print test_index
+        # print'*********\n\n'
+        features_train = f[train_index]
+        labels_train = l[train_index]
+        features_test = f[test_index]
+        labels_test = l[test_index]
+
+  
+        clf.fit(features_train,labels_train)
+
+        pred = clf.predict(features_test)
+
+
+        score = accuracy_score(labels_test,pred)
+
+        prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+        print score
+        print '----------------'
+
+        print prec_reca_f
+        print 'end of cell 6'
+
+
+        print recall_score(labels_test,pred), ' is the recall'
+        print precision_score(labels_test, pred), 'is the precision'
+
+
+
+        print labels_test[7]
+        print pred[7]
+        counter = 0
+        wrongcount=0
+
+        cc = 1
+
+        for i in labels_test:
+            if i == 1 or pred[counter]== 1 :
+                print 'i = ', i,  ' ___pred = ', pred[counter]
+                print cc
+                cc+=1
+            # if i == pred[counter]:
+            #     print i, '****', pred[counter]
+            #     print type(i),'type***', type(pred[counter])
+            #     print counter
+            # else:
+            #     wrongcount+=1
+            counter+=1
+
+        print counter
+        print 'wrong count = ', wrongcount
+
+
+print 'end of cell 11'
+useGaussianNBKfold()
