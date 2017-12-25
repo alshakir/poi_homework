@@ -41,49 +41,27 @@ print 'End of cell 2'
 #%% cell 4
 #from feature_format import featureFormat, targetFeatureSplit
 
-features_list = None
 
+import feature_format
+from tester import dump_classifier_and_data
 
-def useFeaturesMain():
-    import feature_format
-    from tester import dump_classifier_and_data
+### Task 1: Select what features you'll use.
+### features_list is a list of strings, each of which is a feature name.
+### The first feature must be "poi".
+global features_list
+features_list = ['poi','from_poi_percentage','to_poi_percentage','salary','total_payments', 'exercised_stock_options',
+'bonus', 'restricted_stock', 'restricted_stock_deferred', 'total_stock_value',
+'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive'] # You will need to use more features
 
-    ### Task 1: Select what features you'll use.
-    ### features_list is a list of strings, each of which is a feature name.
-    ### The first feature must be "poi".
-    global features_list
-    features_list = ['poi','from_poi_percentage','to_poi_percentage','salary','total_payments', 'exercised_stock_options',
-    'bonus', 'restricted_stock', 'restricted_stock_deferred', 'total_stock_value',
-    'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive'] # You will need to use more features
-
-    ### Load the dictionary containing the dataset
-    with open(testerPath + "final_project_dataset.pkl", "r") as data_file:
-        data_dict = pickle.load(data_file)
-        data_dict.pop('TOTAL')
+### Load the dictionary containing the dataset
+with open(testerPath + "final_project_dataset.pkl", "r") as data_file:
+    data_dict = pickle.load(data_file)
+    data_dict.pop('TOTAL')
 
 
 
-def useFeatures3():
-    import feature_format
-    from tester import dump_classifier_and_data
-
-    ### Task 1: Select what features you'll use.
-    ### features_list is a list of strings, each of which is a feature name.
-    ### The first feature must be "poi".
-    global features_list
-    features_list = ['poi','bonus', 'deferred_income','restricted_stock'] # You will need to use more features
-
-    ### Load the dictionary containing the dataset
-    with open(testerPath + "final_project_dataset.pkl", "r") as data_file:
-        data_dict = pickle.load(data_file)
-        data_dict.pop('TOTAL')
-
-    
 
 
-#useFeaturesMain()
-useFeatures3()
-print features_list
 print 'End of cell 4'
 
 
@@ -241,208 +219,13 @@ print 'end of cell 6'
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
 # Provided to give you a starting point. Try a variety of classifiers.
-def useGaussianNB():
-    print "This is the useGaussianNB() method with no kfold"
-    from sklearn.naive_bayes import GaussianNB
-    clf = GaussianNB()
 
-    print clf
-    print features_train
-    print labels_train
-    
-    clf.fit(features_train,labels_train)
-
-    pred = clf.predict(features_test)
-
-
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-    from sklearn.metrics import recall_score, precision_score
-
-
-    score = accuracy_score(labels_test,pred)
-
-    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
-
-    print score
-    print '----------------'
-
-    print prec_reca_f
-    
-
-
-    print recall_score(labels_test,pred), ' is the recall'
-    print precision_score(labels_test, pred), 'is the precision'
-
-
-
-    # print labels_test[7]
-    # print pred[7]
-    counter = 0
-    wrongcount=0
-
-    cc = 1
-
-    for i in labels_test:
-        if i == 1 or pred[counter]== 1 :
-            print 'i = ', i,  ' ___pred = ', pred[counter]
-            print cc
-            cc+=1
-        # if i == pred[counter]:
-        #     print i, '****', pred[counter]
-        #     print type(i),'type***', type(pred[counter])
-        #     print counter
-        # else:
-        #     wrongcount+=1
-        counter+=1
-
-    print counter
-    print 'wrong count = ', wrongcount
-useGaussianNB()
 
 print 'end of cell 7'
-# #%% cell 8.
-# # svm classifier
-
-# def useSVM():
-    
-#     print "This is the useSVM() method with gridsearchCV"
-#     print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
-#     from sklearn import svm
-
-#     #clf = svm.SVC()
-
-#     param = {'kernel': ['linear', 'rbf','poly', 'rbf', 'sigmoid'] ,
-#     'C':[1,2,3],
-#     'decision_function_shape' : ['ovo', 'ovr']
-#     }
-#     from sklearn.model_selection import GridSearchCV
-#     clf = GridSearchCV(svm.SVC(max_iter=8000000), param)
-
-#     clf.fit(features_train,labels_train)
-
-#     pred = clf.predict(features_test)
-
-
-#     score = accuracy_score(labels_test,pred)
-
-#     prec_reca_f = precision_recall_fscore_support(labels_test,pred)
-
-#     print score
-#     print '----------------'
-
-#     print prec_reca_f
-#     print 'end of cell 6'
-
-
-#     print recall_score(labels_test,pred), ' is the recall'
-#     print precision_score(labels_test, pred), 'is the precision'
 
 
 
 
-#     counter = 0
-#     wrongcount=0
-
-#     cc = 1
-
-#     for i in labels_test:
-#         if i == 1 or pred[counter]== 1 :
-#             print 'i = ', i,  ' ___pred = ', pred[counter]
-#             print cc
-#             cc+=1
-#         # if i == pred[counter]:
-#         #     print i, '****', pred[counter]
-#         #     print type(i),'type***', type(pred[counter])
-#         #     print counter
-#         # else:
-#         #     wrongcount+=1
-#         counter+=1
-
-#     print counter
-#     print 'wrong count = ', wrongcount
-
-
-
-
-#     print 'best params = ', clf.best_params_
-#     print 'best estimator = ', clf.best_estimator_
-#     print 'best score = ', clf.best_score_
-#     print 'best index = ', clf.best_index_
-# useSVM()
-# print ' end of cell 8 '
-
-
-
-#%% cell 9
-
-def useDTClf():
-    
-    print "This is the useDTClf() method with gridsearchCV"
-    from sklearn import tree
-    from sklearn.tree import DecisionTreeClassifier 
-
-    #clf = DecisionTreeClassifier(max_depth=1)
-
-    param = {'max_depth': [1,2,3,4,5,6,7,8,9],
-    'min_samples_split':[2,3,4,5,6,7,8,9],
-    'min_samples_leaf':[1,2,3,4,5,6,7,8,9]}
-    from sklearn.model_selection import GridSearchCV
-    clf = GridSearchCV(DecisionTreeClassifier(), param)
-
-
-    clf.fit(features_train,labels_train)
-
-    pred = clf.predict(features_test)
-
-
-    score = accuracy_score(labels_test,pred)
-
-    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
-
-    print score
-    print '----------------'
-
-    print prec_reca_f
-    print 'end of cell 6'
-
-
-    print recall_score(labels_test,pred), ' is the recall'
-    print precision_score(labels_test, pred), 'is the precision'
-
-
-
-    print 'best params = ', clf.best_params_
-    print 'best estimator = ', clf.best_estimator_
-    print 'best score = ', clf.best_score_
-    print 'best index = ', clf.best_index_
-    counter = 0
-    wrongcount=0
-
-    cc = 1
-
-    for i in labels_test:
-        if i == 1 or pred[counter]== 1 :
-            print 'i = ', i,  ' ___pred = ', pred[counter]
-            print cc
-            cc+=1
-        # if i == pred[counter]:
-        #     print i, '****', pred[counter]
-        #     print type(i),'type***', type(pred[counter])
-        #     print counter
-        # else:
-        #     wrongcount+=1
-        counter+=1
-
-    print counter
-    print 'wrong count = ', wrongcount
-
-    # import graphviz
-    # dot_data = tree.export_graphviz(clf, out_file=None) 
-    # graph = graphviz.Source(dot_data) 
-    # graph.render("poi") 
-
-useDTClf()
-print 'end of cell 9'
 #%% cell testing all classifiers
 
 useGaussianNB()
