@@ -31,10 +31,15 @@ pParent = dirName[:dirName.rindex('/')+1]
 
 
 toolsPath = pParent+'tools'
-sys.path.append(toolsPath)
+finalProjPath = pParent + 'final_project'
+# sys.path.append(toolsPath)
+# sys.path.append(finalProjPath)
 #---------- End of Windows 10 code
 
-
+print dirName
+print pParent
+print toolsPath
+print finalProjPath
 print 'End of cell 2'
 
 
@@ -49,12 +54,20 @@ from tester import dump_classifier_and_data
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
 global features_list
-features_list = ['poi','from_poi_percentage','to_poi_percentage','salary','total_payments', 'exercised_stock_options',
-'bonus', 'restricted_stock', 'restricted_stock_deferred', 'total_stock_value',
-'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive'] # You will need to use more features
+features_list = ['poi','from_poi_percentage', 'to_poi_percentage','salary','bonus','exercised_stock_options', 'deferred_income'] # You will need to use more features
+
+
+
+#['poi','from_poi_percentage','exercised_stock_options', 'salary','restricted_stock', 'deferred_income','total_stock_value'] # You will need to use more features
+
+
+    #  features_list = ['poi','from_poi_percentage','to_poi_percentage','salary','total_payments', 'exercised_stock_options',
+    # 'bonus', 'restricted_stock', 'restricted_stock_deferred', 'total_stock_value',
+    # 'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive']
+
 
 ### Load the dictionary containing the dataset
-with open(testerPath + "final_project_dataset.pkl", "r") as data_file:
+with open( "final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
     data_dict.pop('TOTAL')
 
@@ -123,15 +136,13 @@ labels, features = feature_format.targetFeatureSplit(data)
 # Example starting point. Try investigating other evaluation techniques!
 from sklearn.cross_validation import train_test_split
 features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.3, random_state=42)
+    train_test_split(features, labels, test_size=0.4, random_state=42)
 
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
 ### that the version of poi_id.py that you submit can be run on its own and
 ### generates the necessary .pkl files for validating your results.
-
-dump_classifier_and_data(clf, my_dataset, features_list)
 
 print 'end of cell 6'
 
@@ -178,6 +189,10 @@ clf = GaussianNB()
 # print cross_val_score(clf,features,labels,scoring=None,cv=7)
 # print '-----------\n\n\n'
 # print '-----------\n\n\n'
+
+
+
+dump_classifier_and_data(clf, my_dataset, features_list)
 
 
 f = np.array(features)
