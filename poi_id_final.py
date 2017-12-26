@@ -54,7 +54,8 @@ from tester import dump_classifier_and_data
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
 global features_list
-features_list = ['poi','from_poi_percentage', 'to_poi_percentage','salary','bonus','exercised_stock_options', 'deferred_income'] # You will need to use more features
+features_list = ['poi','from_poi_percentage', 'to_poi_percentage','salary',
+'bonus','exercised_stock_options', 'deferred_income'] # You will need to use more features
 
 
 
@@ -136,7 +137,7 @@ labels, features = feature_format.targetFeatureSplit(data)
 # Example starting point. Try investigating other evaluation techniques!
 from sklearn.cross_validation import train_test_split
 features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.4, random_state=42)
+    train_test_split(features, labels, test_size=0.25, random_state=42)
 
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
