@@ -66,44 +66,34 @@ import feature_format
 from tester import dump_classifier_and_data
 
 ### Task 1: Select what features you'll use.
-### features_list is a list of strings, each of which is a feature name.
-### The first feature must be "poi".
 
 features_list = ['poi','from_poi_percentage', 'to_poi_percentage','salary',
-'bonus','exercised_stock_options', 'deferred_income'] # You will need to use more features
+'bonus','exercised_stock_options', 'deferred_income'] 
 
-
-
-#['poi','from_poi_percentage','exercised_stock_options', 'salary','restricted_stock', 'deferred_income','total_stock_value'] # You will need to use more features
-
-
-    #  features_list = ['poi','from_poi_percentage','to_poi_percentage','salary','total_payments', 'exercised_stock_options',
-    # 'bonus', 'restricted_stock', 'restricted_stock_deferred', 'total_stock_value',
-    # 'expenses', 'loan_advances', 'director_fees', 'deferred_income', 'long_term_incentive']
 
 
 ### Load the dictionary containing the dataset
 with open( "final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
+### Task 2: Remove outliers
     data_dict.pop('TOTAL')
 
 
 
 
 
-print 'End of cell 4'
 
 
-
-#%% cell 5
-
-reload(feature_format)
-### Task 2: Remove outliers
 ### Task 3: Create new feature(s)
-### Store to my_dataset for easy export below.
+### we will create two new features that are the percentage of the total email that the person send to or recieve from POI:
+#           'to_poi_percentage',
+#           'from_poi_percentage'
+
+
 my_dataset = data_dict
 
 #---------- adding new features----------
+
 
 for i in my_dataset.keys():
     x = float( my_dataset[i]['to_messages'])
@@ -120,7 +110,7 @@ for i in my_dataset.keys():
         my_dataset[i]['to_poi_percentage'] = to_poi/totalMessages
         my_dataset[i]['from_poi_percentage'] = from_poi/totalMessages
 
-#----------------------------------------
+#----------End of adding new features----------
 
 ### Extract features and labels from dataset for local testing
 data = feature_format.featureFormat(my_dataset, features_list, sort_keys = True)
@@ -129,12 +119,9 @@ labels, features = feature_format.targetFeatureSplit(data)
 
 
 
-
-
-
-#%% cell 6
-
 ### Task 4: Try a varity of classifiers
+
+
 ### Please name your classifier clf for easy export below.
 ### Note that if you want to do PCA or other multi-stage operations,
 ### you'll need to use Pipelines. For more info:
