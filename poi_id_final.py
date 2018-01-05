@@ -1,50 +1,65 @@
 #!/usr/bin/python
 
 
-#%% cell 1
+
 import sys
 import pickle
 
 
-print 'End of cell 1'
+''' there is a problem of directory locating and reaching to script files...
+
+There are 3 scenarios (Linux, Mac, and windows 10)
+
+------- Secnario one (linux) ----------
+sys.path.append("../tools/")
+
+------- End of Secnario one (linux) ----------
 
 
-# the following line should be commented if running windows 10
-#sys.path.append("../tools/")
 
-#%% cell 2
-# the following code is meant for windows10 OS to add the tools directory to the Path
+------- Secanrio two and three (Win10 and Mac OS) ----------
+
+# the following code is meant for windows10 OS and MacOS to add the 'tools directory' to the Path
 # it should be commented if running Linux
-# import os
-# try:
-#     #This will not work on interactive env. like Jupyter
-#     dirName = os.path.dirname(__file__)
-# except NameError:  # We are the main [Jupyter]  script, not a module
-#     import sys
-#     dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
+import os
+try:
+    #This will not work on interactive env. like Jupyter
+    dirName = os.path.dirname(__file__)
+except NameError:  # We are the main [Jupyter]  script, not a module
+    import sys
+    dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
 
-# #this is for windows10..to be commented in mac
-# #pParent = dirName[:dirName.rindex('\\')+1]
+# this is for windows10..to be commented in mac
+pParent = dirName[:dirName.rindex('\\')+1]
 
-# # this is for mac .. to be commented in windows10
-# pParent = dirName[:dirName.rindex('/')+1]
+# this is for mac .. to be commented in windows10
+pParent = dirName[:dirName.rindex('/')+1]
+
+------- End of Secanrio two and three (Win10 and Mac OS) ----------
 
 
-# toolsPath = pParent+'tools'
-# finalProjPath = pParent + 'final_project'
-# # sys.path.append(toolsPath)
-# # sys.path.append(finalProjPath)
-# #---------- End of Windows 10 code
 
+
+toolsPath = pParent+'tools'
+finalProjPath = pParent + 'final_project'
+sys.path.append(toolsPath)
+sys.path.append(finalProjPath)
+
+------to test that the  paths are correct print them ------
 # print dirName
 # print pParent
 # print toolsPath
 # print finalProjPath
-print 'End of cell 2'
 
 
-#%% cell 4
-#from feature_format import featureFormat, targetFeatureSplit
+
+************ HOWEVER ALL THE ABOVE COMMENTED CODE IS SUBSTITUTED BY PUTTING THE FILES OF THE TOOL
+DIRECTORY ON THE SAME DIRECTORY OF THIS CODE, AND BY THIS WE ELIMINATE THE NEED 
+FOR DIGGING UP THE DIRECTORY TREES **************
+
+'''
+
+
 
 
 import feature_format
@@ -53,7 +68,7 @@ from tester import dump_classifier_and_data
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-global features_list
+
 features_list = ['poi','from_poi_percentage', 'to_poi_percentage','salary',
 'bonus','exercised_stock_options', 'deferred_income'] # You will need to use more features
 
