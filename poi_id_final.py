@@ -15,31 +15,31 @@ print 'End of cell 1'
 #%% cell 2
 # the following code is meant for windows10 OS to add the tools directory to the Path
 # it should be commented if running Linux
-import os
-try:
-    #This will not work on interactive env. like Jupyter
-    dirName = os.path.dirname(__file__)
-except NameError:  # We are the main [Jupyter]  script, not a module
-    import sys
-    dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
+# import os
+# try:
+#     #This will not work on interactive env. like Jupyter
+#     dirName = os.path.dirname(__file__)
+# except NameError:  # We are the main [Jupyter]  script, not a module
+#     import sys
+#     dirName = os.path.dirname(os.path.abspath(sys.argv[0]))
 
-#this is for windows10..to be commented in mac
-#pParent = dirName[:dirName.rindex('\\')+1]
+# #this is for windows10..to be commented in mac
+# #pParent = dirName[:dirName.rindex('\\')+1]
 
-# this is for mac .. to be commented in windows10
-pParent = dirName[:dirName.rindex('/')+1]
+# # this is for mac .. to be commented in windows10
+# pParent = dirName[:dirName.rindex('/')+1]
 
 
-toolsPath = pParent+'tools'
-finalProjPath = pParent + 'final_project'
-# sys.path.append(toolsPath)
-# sys.path.append(finalProjPath)
-#---------- End of Windows 10 code
+# toolsPath = pParent+'tools'
+# finalProjPath = pParent + 'final_project'
+# # sys.path.append(toolsPath)
+# # sys.path.append(finalProjPath)
+# #---------- End of Windows 10 code
 
-print dirName
-print pParent
-print toolsPath
-print finalProjPath
+# print dirName
+# print pParent
+# print toolsPath
+# print finalProjPath
 print 'End of cell 2'
 
 
