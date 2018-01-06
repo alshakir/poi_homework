@@ -116,6 +116,251 @@ labels, features = feature_format.targetFeatureSplit(data)
 
 ### Task 4: Try a varity of classifiers
 
+def useDTClf():
+    
+    print "This is the useDTClf() method"
+    from sklearn import tree
+    from sklearn.tree import DecisionTreeClassifier 
+
+    #clf = DecisionTreeClassifier(max_depth=1)
+
+    param = {'max_depth': [1,2,3,4,5,6,7,8,9],
+    'min_samples_split':[2,3,4,5,6,7,8,9],
+    'min_samples_leaf':[1,2,3,4,5,6,7,8,9]}
+    from sklearn.model_selection import GridSearchCV
+    clf = GridSearchCV(DecisionTreeClassifier(), param)
+
+
+    clf.fit(features_train,labels_train)
+
+    pred = clf.predict(features_test)
+
+
+    score = accuracy_score(labels_test,pred)
+
+    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+    print score
+    print '----------------'
+
+    print prec_reca_f
+    print 'end of cell 6'
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+
+
+    print 'best params = ', clf.best_params_
+    print 'best estimator = ', clf.best_estimator_
+    print 'best score = ', clf.best_score_
+    print 'best index = ', clf.best_index_
+    counter = 0
+    wrongcount=0
+
+    cc = 1
+
+    for i in labels_test:
+        if i == 1 or pred[counter]== 1 :
+            print 'i = ', i,  ' ___pred = ', pred[counter]
+            print cc
+            cc+=1
+        # if i == pred[counter]:
+        #     print i, '****', pred[counter]
+        #     print type(i),'type***', type(pred[counter])
+        #     print counter
+        # else:
+        #     wrongcount+=1
+        counter+=1
+
+    print counter
+    print 'wrong count = ', wrongcount
+
+    # import graphviz
+    # dot_data = tree.export_graphviz(clf, out_file=None) 
+    # graph = graphviz.Source(dot_data) 
+    # graph.render("poi") 
+
+def useSVM():
+    
+    print "This is the useSVM() method"
+    print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
+    from sklearn import svm
+
+    #clf = svm.SVC()
+
+    param = {'kernel': ['linear', 'rbf','poly', 'rbf', 'sigmoid'] ,
+    'C':[1,2,3,4,5,6,7,8,9,10, 300,5000],
+    'decision_function_shape' : ['ovo', 'ovr']
+    }
+    from sklearn.model_selection import GridSearchCV
+    clf = GridSearchCV(svm.SVC(max_iter=8000000), param)
+
+    clf.fit(features_train,labels_train)
+
+    pred = clf.predict(features_test)
+
+
+    score = accuracy_score(labels_test,pred)
+
+    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
+
+    print score
+    print '----------------'
+
+    print prec_reca_f
+    print 'end of cell 6'
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+
+
+
+    counter = 0
+    wrongcount=0
+
+    cc = 1
+
+    for i in labels_test:
+        if i == 1 or pred[counter]== 1 :
+            print 'i = ', i,  ' ___pred = ', pred[counter]
+            print cc
+            cc+=1
+        # if i == pred[counter]:
+        #     print i, '****', pred[counter]
+        #     print type(i),'type***', type(pred[counter])
+        #     print counter
+        # else:
+        #     wrongcount+=1
+        counter+=1
+
+    print counter
+    print 'wrong count = ', wrongcount
+
+
+
+
+    print 'best params = ', clf.best_params_
+    print 'best estimator = ', clf.best_estimator_
+    print 'best score = ', clf.best_score_
+    print 'best index = ', clf.best_index_
+
+def usePCAKnearst():
+    print 'this is the usePCAKnearest method'
+    from sklearn.decomposition import PCA
+
+    myPCA = PCA(n_components=3)
+    transformed_pca_features_train= myPCA.fit_transform(features_train)
+
+    transformed_pca_features_test = myPCA.fit_transform(features_test)
+    from sklearn.neighbors import KNeighborsClassifier
+    # clf = KNeighborsClassifier()
+    # clf.fit(transformed_pca_features_train,labels_train)
+
+    # pred = clf.predict(transformed_pca_features_test)
+
+
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.pipeline import Pipeline
+    
+    params = {'pca__n_components':[2,3],
+    'knearest__algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']}
+
+
+    
+
+    pipe = Pipeline(steps=[('pca', PCA()), ('knearest', KNeighborsClassifier())])
+    clf = GridSearchCV(pipe, params )
+
+
+    clf.fit(features_train,labels_train)
+
+    pred = clf.predict(features_test)
+
+
+
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
+
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+def usePCA_SVM():
+    
+    print 'this is pca svm piping and gridsearch'
+    from sklearn.decomposition import PCA
+    from sklearn.pipeline import Pipeline
+    from sklearn.model_selection import GridSearchCV
+    from sklearn import svm
+
+    params = {'pca__n_components':[2,3],
+    'svm__kernel': ['linear', 'rbf'] ,
+    'svm__C':[1,2,3,100,1000]}
+
+
+    from sklearn.preprocessing import MinMaxScaler
+    scaler = MinMaxScaler()
+
+    scaled_features_train = scaler.fit_transform(features_train)
+    scaled_features_test = scaler.fit_transform(features_test)
+
+    print 'datamax of scaler = ', scaler.data_max_
+
+    print scaled_features_train[:3]
+    
+    pipe = Pipeline(steps=[('pca', PCA()), ('svm', svm.SVC(max_iter=1000000))])
+    clf = GridSearchCV(pipe, params )
+
+
+
+    clf.fit(scaled_features_train,labels_train)
+
+    pred = clf.predict(scaled_features_test)
+
+
+
+
+
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
+
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
+def usePCA_DTC():
+    
+    print ' this is PCA with DTClf no piping'
+    from sklearn.decomposition import PCA
+
+    myPCA = PCA(n_components=3)
+    transformed_pca_features_train= myPCA.fit_transform(features_train)
+
+    transformed_pca_features_test = myPCA.fit_transform(features_test)
+    from sklearn.tree import DecisionTreeClassifier
+    clf = DecisionTreeClassifier()
+    clf.fit(transformed_pca_features_train,labels_train)
+
+    pred = clf.predict(transformed_pca_features_test)
+
+
+
+
+
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
+
+
+
+    print recall_score(labels_test,pred), ' is the recall'
+    print precision_score(labels_test, pred), 'is the precision'
+
 
 
 
