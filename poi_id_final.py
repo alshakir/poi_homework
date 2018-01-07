@@ -4,7 +4,10 @@
 
 import sys
 import pickle
+import feature_format
+from tester import dump_classifier_and_data
 
+# NOTICE : THIS IS CODED FOR PYTHON 2.7
 
 ''' there is a problem of directory locating and reaching to script files...
 
@@ -56,9 +59,6 @@ FOR DIGGING UP THE DIRECTORY TREES **************
 
 
 
-
-import feature_format
-from tester import dump_classifier_and_data
 
 ### Task 1: Select what features you'll use.
 
@@ -121,8 +121,8 @@ def useDTClf():
     print "This is the useDTClf() method"
     from sklearn import tree
     from sklearn.tree import DecisionTreeClassifier 
+    from sklearn.metrics import precision_recall_fscore_support
 
-    #clf = DecisionTreeClassifier(max_depth=1)
 
     param = {'max_depth': [1,2,3,4,5,6,7,8,9],
     'min_samples_split':[2,3,4,5,6,7,8,9],
@@ -140,55 +140,31 @@ def useDTClf():
 
     prec_reca_f = precision_recall_fscore_support(labels_test,pred)
 
-    print score
+    print 'scored = ', score
     print '----------------'
 
+    print 'precision recall and f scores = '
     print prec_reca_f
-    print 'end of cell 6'
-
-
+    
+    print '---'
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
-
-
 
     print 'best params = ', clf.best_params_
     print 'best estimator = ', clf.best_estimator_
     print 'best score = ', clf.best_score_
     print 'best index = ', clf.best_index_
-    counter = 0
-    wrongcount=0
-
-    cc = 1
-
-    for i in labels_test:
-        if i == 1 or pred[counter]== 1 :
-            print 'i = ', i,  ' ___pred = ', pred[counter]
-            print cc
-            cc+=1
-        # if i == pred[counter]:
-        #     print i, '****', pred[counter]
-        #     print type(i),'type***', type(pred[counter])
-        #     print counter
-        # else:
-        #     wrongcount+=1
-        counter+=1
-
-    print counter
-    print 'wrong count = ', wrongcount
-
-    # import graphviz
-    # dot_data = tree.export_graphviz(clf, out_file=None) 
-    # graph = graphviz.Source(dot_data) 
-    # graph.render("poi") 
-
+       
+# ********  WARNING : TIME SONSUMING FUNCTION useSVM() ****************
 def useSVM():
     
     print "This is the useSVM() method"
     print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
     from sklearn import svm
+    from sklearn.metrics import precision_recall_fscore_support
 
-    #clf = svm.SVC()
+
+
 
     param = {'kernel': ['linear', 'rbf','poly', 'rbf', 'sigmoid'] ,
     'C':[1,2,3,4,5,6,7,8,9,10, 300,5000],
@@ -206,39 +182,13 @@ def useSVM():
 
     prec_reca_f = precision_recall_fscore_support(labels_test,pred)
 
-    print score
+    print 'score = ', score
     print '----------------'
 
+    print 'precision recall and f scores = '
     print prec_reca_f
-    print 'end of cell 6'
-
-
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
-
-
-
-
-    counter = 0
-    wrongcount=0
-
-    cc = 1
-
-    for i in labels_test:
-        if i == 1 or pred[counter]== 1 :
-            print 'i = ', i,  ' ___pred = ', pred[counter]
-            print cc
-            cc+=1
-        # if i == pred[counter]:
-        #     print i, '****', pred[counter]
-        #     print type(i),'type***', type(pred[counter])
-        #     print counter
-        # else:
-        #     wrongcount+=1
-        counter+=1
-
-    print counter
-    print 'wrong count = ', wrongcount
 
 
 
@@ -251,26 +201,20 @@ def useSVM():
 def usePCAKnearst():
     print 'this is the usePCAKnearest method'
     from sklearn.decomposition import PCA
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.pipeline import Pipeline
+    from sklearn.neighbors import KNeighborsClassifier
 
     myPCA = PCA(n_components=3)
     transformed_pca_features_train= myPCA.fit_transform(features_train)
 
     transformed_pca_features_test = myPCA.fit_transform(features_test)
-    from sklearn.neighbors import KNeighborsClassifier
-    # clf = KNeighborsClassifier()
-    # clf.fit(transformed_pca_features_train,labels_train)
 
-    # pred = clf.predict(transformed_pca_features_test)
-
-
-    from sklearn.model_selection import GridSearchCV
-    from sklearn.pipeline import Pipeline
-    
     params = {'pca__n_components':[2,3],
     'knearest__algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute']}
 
-
-    
 
     pipe = Pipeline(steps=[('pca', PCA()), ('knearest', KNeighborsClassifier())])
     clf = GridSearchCV(pipe, params )
@@ -281,37 +225,33 @@ def usePCAKnearst():
     pred = clf.predict(features_test)
 
 
-
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-    from sklearn.metrics import recall_score, precision_score
-
-
-
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
 
 def usePCA_SVM():
     
-    print 'this is pca svm piping and gridsearch'
+    print 'this is pca svm piping and gridsearch method'
     from sklearn.decomposition import PCA
     from sklearn.pipeline import Pipeline
     from sklearn.model_selection import GridSearchCV
     from sklearn import svm
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
 
     params = {'pca__n_components':[2,3],
     'svm__kernel': ['linear', 'rbf'] ,
     'svm__C':[1,2,3,100,1000]}
 
-
-    from sklearn.preprocessing import MinMaxScaler
     scaler = MinMaxScaler()
 
     scaled_features_train = scaler.fit_transform(features_train)
     scaled_features_test = scaler.fit_transform(features_test)
 
-    print 'datamax of scaler = ', scaler.data_max_
 
-    print scaled_features_train[:3]
+    # the following two lines are made for debugging only
+    # print 'datamax of scaler = ', scaler.data_max_
+    # print scaled_features_train[:3]
     
     pipe = Pipeline(steps=[('pca', PCA()), ('svm', svm.SVC(max_iter=1000000))])
     clf = GridSearchCV(pipe, params )
@@ -324,13 +264,6 @@ def usePCA_SVM():
 
 
 
-
-
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-    from sklearn.metrics import recall_score, precision_score
-
-
-
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
 
@@ -338,6 +271,8 @@ def usePCA_DTC():
     
     print ' this is PCA with DTClf no piping'
     from sklearn.decomposition import PCA
+    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+    from sklearn.metrics import recall_score, precision_score
 
     myPCA = PCA(n_components=3)
     transformed_pca_features_train= myPCA.fit_transform(features_train)
@@ -348,15 +283,6 @@ def usePCA_DTC():
     clf.fit(transformed_pca_features_train,labels_train)
 
     pred = clf.predict(transformed_pca_features_test)
-
-
-
-
-
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-    from sklearn.metrics import recall_score, precision_score
-
-
 
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
@@ -430,6 +356,8 @@ print '=============Final Result=================='
 print "average recall =  ", avgRecall
 print "average precision  = " , avgPrecision
 
+print '===========================================\n\n'
+
 
 
 
@@ -490,3 +418,16 @@ dump_classifier_and_data(clf, my_dataset, features_list)
 
 
 
+
+#************** TRY UNCOMMENTING EVERY METHOD BELOW *******************
+#************** THIS WILL SHOW DIFFERENT CLASSIFIERS TRIALS **************
+
+# useDTClf()
+
+# useSVM()
+
+#usePCAKnearst()
+
+#usePCA_SVM()
+
+#usePCA_DTC()
