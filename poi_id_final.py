@@ -73,8 +73,111 @@ with open( "final_project_dataset.pkl", "r") as data_file:
 
 
 
+''' NOTICE
+This dataset has been investigated during the "outlier" lesson
+
+it was shown that the extremely high value is the last item which is the 'Total'
+so it was popped out of the dictionary
 
 
+There are other outlier of some of the employees like salary and bonus,
+but although they are outlier however they are very important and more connected with POIs
+so I opted (as in the lesson) to keep them because they will help guiding my classifier e.g.
+LAY KENNETH L and SKILLING JEFFREY K
+'''
+
+
+# assign data_dict to my_dataset for exporting it for the tester.py file
+my_dataset = data_dict
+
+
+#let us investigate my_dataset keys
+
+# print 'length of my_dataset'
+# print len(my_dataset)
+# print 'my_dataset keys are : '
+# for k, v in  my_dataset.iteritems():
+#     print k
+
+# print 'keys of every element in my_dataset: '
+# for k,v in my_dataset['METTS MARK'].iteritems():
+#     print k
+
+
+# print my_dataset.items()
+
+print my_dataset['ALLEN PHILLIP K']
+
+print my_dataset['YEAP SOON']
+import pandas as pd
+
+df = pd.DataFrame(my_dataset)
+
+print df.columns
+print '\n\n\n*************'
+
+df.replace('NaN',0,inplace=True)
+
+print df
+df = df.transpose()
+
+print ('***************cloumns after transpose*************')
+print df.columns
+y = df.loc[:,'poi']
+df.drop(['poi'],1, inplace=True)
+
+
+
+df.drop(['email_address'],1, inplace=True)
+
+
+
+                 
+print type(df)
+print '-------------- dropped poi --------------'
+
+print df.columns
+
+print df.columns[3]
+
+def sep(shape, text=''):
+    s = shape *10
+    print s,' ', text, ' ' , s
+
+
+
+sep('*', 'values of df ')
+
+
+print df.values
+
+x = df.values
+sep('$')
+
+
+print df.iloc[-1]
+
+
+print df.index
+
+
+sep('hahah')
+print y
+
+for row in range(x.shape[0]): # df is the DataFrame
+         for col in range(x.shape[1]):
+            #  print df.get_value(row,col)
+             if x[row,col] < 0 :
+                 print(row, col)
+                 print x[row,col]
+
+
+
+from sklearn.feature_selection import SelectKBest, chi2, f_classif
+
+features_selected = SelectKBest(f_classif,k=4).fit(x,y)
+
+print features_selected.get_support()
 
 
 ### Task 3: Create new feature(s)
@@ -83,7 +186,7 @@ with open( "final_project_dataset.pkl", "r") as data_file:
 #           'from_poi_percentage'
 
 
-my_dataset = data_dict
+
 
 #---------- adding new features----------
 
@@ -109,7 +212,8 @@ for i in my_dataset.keys():
 data = feature_format.featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = feature_format.targetFeatureSplit(data)
 
-
+print (type(labels))
+print (type(features))
 
 
 ### Task 4: Try a varity of classifiers
@@ -420,7 +524,7 @@ dump_classifier_and_data(clf, my_dataset, features_list)
 #************** TRY UNCOMMENTING EVERY METHOD BELOW *******************
 #************** THIS WILL SHOW DIFFERENT CLASSIFIERS TRIALS **************
 
-# useDTClf()
+useDTClf()
 
 # useSVM()
 
