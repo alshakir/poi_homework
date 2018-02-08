@@ -104,11 +104,43 @@ my_dataset = data_dict
 #     print k
 
 
-# print my_dataset.items()
 
-print my_dataset['ALLEN PHILLIP K']
 
-print my_dataset['YEAP SOON']
+### Task 3: Create new feature(s)
+### we will create two new features that are the percentage of the total email that the person sent to or recieved from POI:
+#           'to_poi_percentage',
+#           'from_poi_percentage'
+
+
+
+
+#---------- adding new features----------
+
+
+for i in my_dataset.keys():
+    x = float( my_dataset[i]['to_messages'])
+    y = float(my_dataset[i]['from_messages'])
+    to_poi= float( my_dataset[i]['from_this_person_to_poi'])
+    
+    from_poi = float(my_dataset[i]['from_poi_to_this_person'])
+    totalMessages = x + y
+
+
+    my_dataset[i]['to_poi_percentage'] = 0
+    my_dataset[i]['from_poi_percentage'] = 0
+    if totalMessages > 0:
+        my_dataset[i]['to_poi_percentage'] = to_poi/totalMessages
+        my_dataset[i]['from_poi_percentage'] = from_poi/totalMessages
+
+#----------End of adding new features----------
+
+
+
+
+
+
+
+
 import pandas as pd
 
 df = pd.DataFrame(my_dataset)
@@ -118,7 +150,7 @@ print '\n\n\n*************'
 
 df.replace('NaN',0,inplace=True)
 
-print df
+# print df
 df = df.transpose()
 
 print ('***************cloumns after transpose*************')
@@ -149,27 +181,28 @@ def sep(shape, text=''):
 sep('*', 'values of df ')
 
 
-print df.values
+# print df.values
 
 x = df.values
-sep('$')
+# sep('$')
+
+# print df.iloc[0]
+# sep('j')
+# print df.iloc[-1]
 
 
-print df.iloc[-1]
+# print df.index
 
 
-print df.index
+# sep('hahah')
+# print y
 
-
-sep('hahah')
-print y
-
-for row in range(x.shape[0]): # df is the DataFrame
-         for col in range(x.shape[1]):
-            #  print df.get_value(row,col)
-             if x[row,col] < 0 :
-                 print(row, col)
-                 print x[row,col]
+# for row in range(x.shape[0]): # df is the DataFrame
+        #  for col in range(x.shape[1]):
+        #     #  print df.get_value(row,col)
+        #      if x[row,col] < 0 :
+        #          print(row, col)
+        #          print x[row,col]
 
 
 
@@ -177,36 +210,32 @@ from sklearn.feature_selection import SelectKBest, chi2, f_classif
 
 features_selected = SelectKBest(f_classif,k=4).fit(x,y)
 
-print features_selected.get_support()
+print features_selected.get_support(indices=True)
+
+ilist = features_selected.get_support(indices=True)
+myList = [df.columns[i] for i in ilist]
+sep('bnbnbnbnb')
+print myList
+
+hmmm = ['poi']
+hmmm.extend(myList)
+
+sep('vvv')
+print hmmm
 
 
-### Task 3: Create new feature(s)
-### we will create two new features that are the percentage of the total email that the person sent to or recieved from POI:
-#           'to_poi_percentage',
-#           'from_poi_percentage'
+features_list = hmmm
 
 
 
 
-#---------- adding new features----------
 
 
-for i in my_dataset.keys():
-    x = float( my_dataset[i]['to_messages'])
-    y = float(my_dataset[i]['from_messages'])
-    to_poi= float( my_dataset[i]['from_this_person_to_poi'])
-    
-    from_poi = float(my_dataset[i]['from_poi_to_this_person'])
-    totalMessages = x + y
 
 
-    my_dataset[i]['to_poi_percentage'] = 0
-    my_dataset[i]['from_poi_percentage'] = 0
-    if totalMessages > 0:
-        my_dataset[i]['to_poi_percentage'] = to_poi/totalMessages
-        my_dataset[i]['from_poi_percentage'] = from_poi/totalMessages
 
-#----------End of adding new features----------
+
+
 
 ### Extract features and labels from dataset for local testing
 data = feature_format.featureFormat(my_dataset, features_list, sort_keys = True)
