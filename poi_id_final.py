@@ -208,10 +208,11 @@ x = df.values
 
 from sklearn.feature_selection import SelectKBest, chi2, f_classif
 
-features_selected = SelectKBest(f_classif,k=4).fit(x,y)
+features_selected = SelectKBest(f_classif,k=5).fit(x,y)
 
 print features_selected.get_support(indices=True)
 
+print features_selected.scores_
 ilist = features_selected.get_support(indices=True)
 myList = [df.columns[i] for i in ilist]
 sep('nbnb')
@@ -374,11 +375,8 @@ def usePCA_SVM():
     'svm__kernel': ['linear', 'rbf'] ,
     'svm__C':[1,2,3,100,1000]}
 
-    scaler = MinMaxScaler()
-
-    scaled_features_train = scaler.fit_transform(features_train)
-    scaled_features_test = scaler.fit_transform(features_test)
-
+    
+    
 
     # the following two lines are made for debugging only
     # print 'datamax of scaler = ', scaler.data_max_
@@ -389,9 +387,9 @@ def usePCA_SVM():
 
 
 
-    clf.fit(scaled_features_train,labels_train)
+    clf.fit(features_train,labels_train)
 
-    pred = clf.predict(scaled_features_test)
+    pred = clf.predict(features_test)
 
 
 
@@ -457,12 +455,38 @@ import numpy as np
 kf = KFold(n_splits=7,shuffle=True)
 clf = GaussianNB()
 
+
+
+
+
+clf.fit(features_train,labels_train)
+
+pred = clf.predict(features_test)
+
+score = accuracy_score(labels_test,pred)
+
+recall =  recall_score(labels_test,pred)
+precision = precision_score(labels_test, pred)
+print '**** The classifier result ****'
+print recall, ' is the recall'
+print precision, 'is the precision'
+print 
+
+
+
+
+
+
+
+
 f = np.array(features)
 l = np.array(labels)
 
 recallList = []
 precisionList = []
 
+
+#---- cross validation starts here -----------
 for train_index, test_index in kf.split(features):
     features_train = f[train_index]
     labels_train = l[train_index]
@@ -498,7 +522,7 @@ print "average precision  = " , avgPrecision
 print '===========================================\n\n'
 
 
-
+#--------End of cross validation ---------------
 
 
 
@@ -561,9 +585,9 @@ dump_classifier_and_data(clf, my_dataset, features_list)
 #************** TRY UNCOMMENTING EVERY METHOD BELOW *******************
 #************** THIS WILL SHOW DIFFERENT CLASSIFIERS TRIALS **************
 
-useDTClf()
+#useDTClf()
 
-# useSVM()
+#useSVM()
 
 #usePCAKnearst()
 
