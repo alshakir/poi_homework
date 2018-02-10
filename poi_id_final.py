@@ -214,7 +214,7 @@ print features_selected.get_support(indices=True)
 
 ilist = features_selected.get_support(indices=True)
 myList = [df.columns[i] for i in ilist]
-sep('bnbnbnbnb')
+sep('nbnb')
 print myList
 
 hmmm = ['poi']
@@ -431,8 +431,16 @@ def usePCA_DTC():
 
 # Example starting point. Try investigating other evaluation techniques!
 from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 features_train, features_test, labels_train, labels_test = \
     train_test_split(features, labels, test_size=0.25, random_state=42)
+
+
+
+scaler = MinMaxScaler()
+
+features_train = scaler.fit_transform(features_train)
+features_test = scaler.fit_transform(features_test)
 
 
 import numpy as np
