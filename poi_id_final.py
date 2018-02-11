@@ -519,16 +519,6 @@ print "average precision  = " , avgPrecision
 print '===========================================\n\n'
 
 
-pred_partial = clf_partial.predict(features_test)
-
-print len(features_test)
-print pred_partial
-print clf_partial.class_count_
-print clf
-
-print recall_score(labels_test,pred_partial)
-
-print precision_score(labels_test,pred_partial)
 
 #--------End of cross validation ---------------
 
