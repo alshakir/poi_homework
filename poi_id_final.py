@@ -208,12 +208,15 @@ x = df.values
 
 from sklearn.feature_selection import SelectKBest, chi2, f_classif
 
-features_selected = SelectKBest(f_classif,k=5).fit(x,y)
+features_selected = SelectKBest(f_classif,k=2).fit(x,y)
 
 print features_selected.get_support(indices=True)
 
 print features_selected.scores_
+
 ilist = features_selected.get_support(indices=True)
+
+ilist = [0,2,11,20]
 myList = [df.columns[i] for i in ilist]
 sep('nbnb')
 print myList
@@ -256,9 +259,9 @@ def useDTClf():
     from sklearn.metrics import precision_recall_fscore_support
 
 
-    param = {'max_depth': [1,2,3,4,5,6,7,8,9],
-    'min_samples_split':[2,3,4,5,6,7,8,9],
-    'min_samples_leaf':[1,2,3,4,5,6,7,8,9]}
+    param = {'max_depth': [1,2,3,9],
+    'min_samples_split':[2,3,4,9],
+    'min_samples_leaf':[1,2,3,9]}
     from sklearn.model_selection import GridSearchCV
     clf = GridSearchCV(DecisionTreeClassifier(), param)
 
@@ -286,7 +289,9 @@ def useDTClf():
     print 'best estimator = ', clf.best_estimator_
     print 'best score = ', clf.best_score_
     print 'best index = ', clf.best_index_
-       
+    print 'feature importances : ', clf.best_estimator_.feature_importances_
+
+    print clf.best_estimator_.n_features_
 # ********  WARNING : TIME SONSUMING FUNCTION useSVM() ****************
 def useSVM():
     
@@ -459,18 +464,7 @@ clf = GaussianNB()
 
 
 
-clf.fit(features_train,labels_train)
 
-pred = clf.predict(features_test)
-
-score = accuracy_score(labels_test,pred)
-
-recall =  recall_score(labels_test,pred)
-precision = precision_score(labels_test, pred)
-print '**** The classifier result ****'
-print recall, ' is the recall'
-print precision, 'is the precision'
-print 
 
 
 
@@ -486,21 +480,24 @@ recallList = []
 precisionList = []
 
 
+
+clf_partial = GaussianNB()
+
 #---- cross validation starts here -----------
 for train_index, test_index in kf.split(features):
-    features_train = f[train_index]
-    labels_train = l[train_index]
-    features_test = f[test_index]
-    labels_test = l[test_index]
+    features_train1 = f[train_index]
+    labels_train1 = l[train_index]
+    features_test1 = f[test_index]
+    labels_test1 = l[test_index]
 
-    clf.fit(features_train,labels_train)
+    clf_partial.fit(features_train1,labels_train1)
 
-    pred = clf.predict(features_test)
+    pred1 = clf_partial.predict(features_test1)
 
-    score = accuracy_score(labels_test,pred)
+    score = accuracy_score(labels_test1,pred1)
 
-    recall =  recall_score(labels_test,pred)
-    precision = precision_score(labels_test, pred)
+    recall =  recall_score(labels_test1,pred1)
+    precision = precision_score(labels_test1, pred1)
     print '**** New Fold ****'
     print recall, ' is the recall'
     print precision, 'is the precision'
@@ -522,10 +519,35 @@ print "average precision  = " , avgPrecision
 print '===========================================\n\n'
 
 
+pred_partial = clf_partial.predict(features_test)
+
+print len(features_test)
+print pred_partial
+print clf_partial.class_count_
+print clf
+
+print recall_score(labels_test,pred_partial)
+
+print precision_score(labels_test,pred_partial)
+
 #--------End of cross validation ---------------
 
 
 
+
+
+clf.fit(features_train,labels_train)
+
+pred = clf.predict(features_test)
+
+score = accuracy_score(labels_test,pred)
+
+recall =  recall_score(labels_test,pred)
+precision = precision_score(labels_test, pred)
+print '**** The classifier result ****'
+print recall, ' is the recall'
+print precision, 'is the precision'
+print 
 
 '''
 Example run  of this code
