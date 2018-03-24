@@ -139,27 +139,31 @@ for i in my_dataset.keys():
 
 
 
+#---------- Now we need to do some dataset cleaning and reorganizing---------
 
+# Ii will convert the dictionary to dataFrame to do the following:
+# 1- replace  the NaN value by zero
+# 2- remove the 'poi' column
+# 3- remove the email address column since it is not numerical.
 
 import pandas as pd
 
 df = pd.DataFrame(my_dataset)
 
-print df.columns
-print '\n\n\n*************'
+# print df.columns
+# print '\n\n\n*************'
 
 df.replace('NaN',0,inplace=True)
 
 # print df
 df = df.transpose()
 
-print ('***************cloumns after transpose*************')
-print df.columns
+# print ('***************cloumns after transpose*************')
+# print df.columns
+
+
 y = df.loc[:,'poi']
 df.drop(['poi'],1, inplace=True)
-
-
-
 df.drop(['email_address'],1, inplace=True)
 
 
@@ -473,8 +477,8 @@ clf = GaussianNB()
 
 
 
-f = np.array(features)
-l = np.array(labels)
+f = np.array(features_train)
+l = np.array(labels_train)
 
 recallList = []
 precisionList = []
@@ -484,7 +488,7 @@ precisionList = []
 clf_partial = GaussianNB()
 
 #---- cross validation starts here -----------
-for train_index, test_index in kf.split(features):
+for train_index, test_index in kf.split(features_train):
     features_train1 = f[train_index]
     labels_train1 = l[train_index]
     features_test1 = f[test_index]
@@ -512,20 +516,21 @@ for train_index, test_index in kf.split(features):
 avgRecall = np.average(recallList)
 avgPrecision = np.average(precisionList)
 
-print '=============Final Result=================='
+print '=============Final Average Result of All folds =================='
 print "average recall =  ", avgRecall
 print "average precision  = " , avgPrecision
 
-print '===========================================\n\n'
+print '===============================================================\n\n'
 
 
 
 #--------End of cross validation ---------------
 
 
+pp = clf_partial.predict(features_test)
 
-
-
+print recall_score(labels_test,pp)
+print precision_score(labels_test,pp)
 clf.fit(features_train,labels_train)
 
 pred = clf.predict(features_test)
