@@ -141,7 +141,7 @@ for i in my_dataset.keys():
 
 #---------- Now we need to do some dataset cleaning and reorganizing---------
 
-# Ii will convert the dictionary to dataFrame to do the following:
+# I will convert the dictionary to dataFrame to do the following:
 # 1- replace  the NaN value by zero
 # 2- remove the 'poi' column
 # 3- remove the email address column since it is not numerical.
@@ -149,19 +149,8 @@ for i in my_dataset.keys():
 import pandas as pd
 
 df = pd.DataFrame(my_dataset)
-
-# print df.columns
-# print '\n\n\n*************'
-
 df.replace('NaN',0,inplace=True)
-
-# print df
 df = df.transpose()
-
-# print ('***************cloumns after transpose*************')
-# print df.columns
-
-
 y = df.loc[:,'poi']
 df.drop(['poi'],1, inplace=True)
 df.drop(['email_address'],1, inplace=True)
