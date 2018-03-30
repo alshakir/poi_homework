@@ -1,0 +1,24 @@
+I hereby confirm that this submission is my work. I have cited below the origins of any parts of the submission that were taken from Websites, books, forums, blog posts, github repositories, etc.
+
+
+* SciPy documentations
+https://docs.scipy.org/doc/
+
+* Pandas API documentation
+https://pandas.pydata.org
+
+* Stack overflow — multiple programming questions
+https://stackoverflow.com
+
+
+* Data Leakage in Machine Learning
+https://machinelearningmastery.com/data-leakage-machine-learning/
+
+
+* Scikit learn documentation
+scikit-learn.org/
+
+* Cross Validation done wrong
+http://www.alfredo.motta.name/cross-validation-done-wrong/
+
+* Udacity material for the course "intorduction to machine learning"
