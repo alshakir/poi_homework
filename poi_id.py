@@ -218,11 +218,6 @@ features_list = theFinalList
 
 
 
-
-
-
-
-
 ### Extract features and labels from dataset for local testing
 data = feature_format.featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = feature_format.targetFeatureSplit(data)
@@ -235,7 +230,9 @@ labels, features = feature_format.targetFeatureSplit(data)
 ### Task 4: Try a varity of classifiers
 
 def useDTClf():
-    
+    '''
+    This function uses Decision tree classifier in addition to Grid search cross validation
+    '''
     print "This is the useDTClf() method"
     from sklearn import tree
     from sklearn.tree import DecisionTreeClassifier 
@@ -281,13 +278,14 @@ def useDTClf():
 
 # ********  WARNING : TIME SONSUMING FUNCTION useSVM() ****************
 def useSVM():
-    
+    '''
+    This function uses SVM in addition to Grid search cross validation
+    Notice that this is time consuming
+    '''
     print "This is the useSVM() method"
     print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
     from sklearn import svm
     from sklearn.metrics import precision_recall_fscore_support
-
-
 
 
     param = {'kernel': ['linear', 'rbf','poly', 'rbf', 'sigmoid'] ,
@@ -300,7 +298,6 @@ def useSVM():
     clf.fit(features_train,labels_train)
 
     pred = clf.predict(features_test)
-
 
     score = accuracy_score(labels_test,pred)
 
@@ -323,6 +320,10 @@ def useSVM():
     print 'best index = ', clf.best_index_
 
 def usePCAKnearst():
+        '''
+    This function uses Knearst with PCA piped to Grid search cross validation
+    
+    '''
     print 'this is the usePCAKnearest method'
     from sklearn.decomposition import PCA
     from sklearn.metrics import accuracy_score, precision_recall_fscore_support
@@ -352,8 +353,11 @@ def usePCAKnearst():
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
 
+
 def usePCA_SVM():
-    
+    '''
+    This function uses SVM and PCA piped to Grid search cross validation
+    '''
     print 'this is pca svm piping and gridsearch method'
     from sklearn.decomposition import PCA
     from sklearn.pipeline import Pipeline
@@ -367,7 +371,6 @@ def usePCA_SVM():
     'svm__kernel': ['linear', 'rbf'] ,
     'svm__C':[1,2,3,100,1000]}
 
-    
     
 
     # the following two lines are made for debugging only
@@ -389,7 +392,9 @@ def usePCA_SVM():
     print precision_score(labels_test, pred), 'is the precision'
 
 def usePCA_DTC():
-    
+    '''
+    This methos use the Decision tree classifir with PCA.
+    '''
     print ' this is PCA with DTClf no piping'
     from sklearn.decomposition import PCA
     from sklearn.metrics import accuracy_score, precision_recall_fscore_support
