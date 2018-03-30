@@ -22,4 +22,4 @@ scikit-learn.org/
 http://www.alfredo.motta.name/cross-validation-done-wrong/
 
 * Udacity material for the course "intorduction to machine learning"
-http:www.udacity.com
+http://www.udacity.com
