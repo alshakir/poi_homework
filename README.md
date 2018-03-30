@@ -16,7 +16,7 @@ They are left there to show that I tried multiple classifiers.
 
 
 
-## questionsAnswers.txt
+## questionsAnswers.pdf
 
 It contains the answer for the accompanying questions to this project.
 

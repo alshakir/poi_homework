@@ -320,7 +320,7 @@ def useSVM():
     print 'best index = ', clf.best_index_
 
 def usePCAKnearst():
-        '''
+    '''
     This function uses Knearst with PCA piped to Grid search cross validation
     
     '''
