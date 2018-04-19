@@ -127,7 +127,6 @@ def sep(shape, text=''):
 
 
 for i in my_dataset.keys():
-    
     x = float( my_dataset[i]['to_messages'])
     y = float(my_dataset[i]['from_messages'])
     to_poi= float( my_dataset[i]['from_this_person_to_poi'])
@@ -147,33 +146,6 @@ for i in my_dataset.keys():
 
 
 
-# During the second submission I tried to create a new feature called totalGain. this is the result of summing all features
-# it showed me that two  employee gained zero!
-# one of them had all input value set to 'NaN' ('LOCKHART EUGENE E')
-# So I opted to remove him and I removed another name which is not an employee 'THE TRAVEL AGENCY IN THE PARK'
-
-
-for i in my_dataset:
-    #print i
-    theSum = 0
-
-    countHere = 0
-    for j in my_dataset[i]:
-        #print j,'--->', my_dataset[i][j]
-        n = 0
-        try:
-            n = int(my_dataset[i][j])
-        except:
-            pass
-        theSum = theSum + n
-
-    my_dataset[i]['totalGain'] = theSum
-
-
-my_dataset.pop('LOCKHART EUGENE E')
-my_dataset.pop('THE TRAVEL AGENCY IN THE PARK')
-
-
 
 
 #---------- Now we need to do some dataset cleaning and reorganizing---------
@@ -186,41 +158,18 @@ my_dataset.pop('THE TRAVEL AGENCY IN THE PARK')
 import pandas as pd
 
 df = pd.DataFrame(my_dataset)
-
-#print(df.columns)
-sep('^^','total persons')
-print (len(df.columns))
-
-
-
-
-
-
 df.replace('NaN',0,inplace=True)
 df = df.transpose()
 
-
-sep('$$', 'Total POI')
-
-print df['poi'].value_counts()
-df.sort_values('totalGain', inplace=True)
-print df.head(5)
 #extract the labels in y variable
 y = df.loc[:,'poi']
 df.drop(['poi'],1, inplace=True)
 df.drop(['email_address'],1, inplace=True)
 
 
-
 #extract the features values in x variable
 x = df.values
 
-print df.columns
-
-ss = 0
-for i in df.columns:
-    print ss,"---",i
-    ss = ss + 1
 
 
 
@@ -240,152 +189,15 @@ print features_selected.scores_
 
 
 # notice that iList here is the list chosen by the SelectKBest, however in the following lines I will change it by hand
-#ilist = features_selected.get_support(indices=True)
+ilist = features_selected.get_support(indices=True)
 
 
 # here the iList is modified by hand based on guessing and heuristic manipulations
-ilist = [0,2,15,21]
+ilist = [0,2,11,20]
 
 
 #myList is the names of the features extracted from the dataset
 myList = [df.columns[i] for i in ilist]
-
-
-'''
-
-k = 1
-['poi', 'exercised_stock_options']
-
-
-**********   The classifier result   **********
-0.666666666667  is the recall
-0.666666666667 is the precision
-
-tester.py result: 
-	Accuracy: 0.90409	Precision: 0.46055	Recall: 0.32100	F1: 0.37831	F2: 0.34171
-	Total predictions: 11000	True positives:  321	False positives:  376	False negatives:  679	True negatives: 9624
-
-----------
-
-k = 2 
-['poi', 'exercised_stock_options', 'total_stock_value']
-
-**********   The classifier result   **********
-0.5  is the recall
-0.25 is the precision
-
-tester.py result: 
-Accuracy: 0.84069	Precision: 0.46889	Recall: 0.26750	F1: 0.34066	F2: 0.29264
-	Total predictions: 13000	True positives:  535	False positives:  606	False negatives: 1465	True negatives: 10394
-
-
------------------
-
-
-k = 3
-
-['poi', 'bonus', 'exercised_stock_options', 'total_stock_value']
-
-**********   The classifier result   **********
-0.333333333333  is the recall
-0.125 is the precision
-
-tester.py result: 
-Accuracy: 0.84300	Precision: 0.48581	Recall: 0.35100	F1: 0.40755	F2: 0.37163
-	Total predictions: 13000	True positives:  702	False positives:  743	False negatives: 1298	True negatives: 10257
-
-
-
----------------
-
-k = 4
-
-['poi', 'bonus', 'exercised_stock_options', 'salary', 'total_stock_value']
-
-**********   The classifier result   **********
-0.5  is the recall
-0.166666666667 is the precision
-
-
-tester.py result: 
-Accuracy: 0.84677	Precision: 0.50312	Recall: 0.32300	F1: 0.39342	F2: 0.34791
-	Total predictions: 13000	True positives:  646	False positives:  638	False negatives: 1354	True negatives: 10362
-
-
-    
-------------
-
-
-k = 5
-
-
-['poi', 'bonus', 'exercised_stock_options', 'salary', 'totalGain', 'total_stock_value']
-
-**********   The classifier result   **********
-1.0  is the recall
-0.181818181818 is the precision
-
-tester.py result:
-Accuracy: 0.86067	Precision: 0.46617	Recall: 0.31000	F1: 0.37237	F2: 0.33226
-	Total predictions: 15000	True positives:  620	False positives:  710	False negatives: 1380	True negatives: 12290
-
-
----------------
-
-
-k = 6
-
-
-['poi', 'bonus', 'deferred_income', 'exercised_stock_options', 'salary', 'totalGain', 'total_stock_value']
-
-**********   The classifier result   **********
-0.666666666667  is the recall
-0.142857142857 is the precision
-
-tester.py result:
-Accuracy: 0.86393	Precision: 0.48659	Recall: 0.37200	F1: 0.42165	F2: 0.39039
-	Total predictions: 15000	True positives:  744	False positives:  785	False negatives: 1256	True negatives: 12215
-
-
-
---------------
-k= 7
-
-['poi', 'bonus', 'deferred_income', 'exercised_stock_options', 'long_term_incentive', 'salary', 'totalGain', 'total_stock_value']
-
-
-**********   The classifier result   **********
-0.666666666667  is the recall
-0.142857142857 is the precision
-
-
-tester.py result:
-
-Accuracy: 0.85373	Precision: 0.44143	Recall: 0.36550	F1: 0.39989	F2: 0.37852
-	Total predictions: 15000	True positives:  731	False positives:  925	False negatives: 1269	True negatives: 12075
-
-
---------------
-
-k = 13
-
-
-['poi', 'bonus', 'deferred_income', 'exercised_stock_options', 'expenses', 
-'from_poi_to_this_person', 'loan_advances', 'long_term_incentive', 'restricted_stock', 
-'salary', 'shared_receipt_with_poi', 'totalGain', 'total_payments', 'total_stock_value']
-
-**********   The classifier result   **********
-1.0  is the recall
-0.166666666667 is the precision
-
-
-tester.py result:
-Accuracy: 0.83133	Precision: 0.34647	Recall: 0.29900	F1: 0.32099	F2: 0.30742
-	Total predictions: 15000	True positives:  598	False positives: 1128	False negatives: 1402	True negatives: 11872
-
-
-'''
-
 
 
 
@@ -417,11 +229,11 @@ labels, features = feature_format.targetFeatureSplit(data)
 
 ### Task 4: Try a varity of classifiers
 
-def use_decision_tree_clf():
+def useDTClf():
     '''
     This function uses Decision tree classifier in addition to Grid search cross validation
     '''
-    print "This is the use_decision_tree_clf() method"
+    print "This is the useDTClf() method"
     from sklearn import tree
     from sklearn.tree import DecisionTreeClassifier 
     from sklearn.metrics import precision_recall_fscore_support
@@ -433,7 +245,7 @@ def use_decision_tree_clf():
     from sklearn.model_selection import GridSearchCV
     clf = GridSearchCV(DecisionTreeClassifier(), param)
 
-    
+
     clf.fit(features_train,labels_train)
 
     pred = clf.predict(features_test)
@@ -464,13 +276,13 @@ def use_decision_tree_clf():
 
 
 
-# ********  WARNING : TIME SONSUMING FUNCTION use_svm() ****************
-def use_svm():
+# ********  WARNING : TIME SONSUMING FUNCTION useSVM() ****************
+def useSVM():
     '''
     This function uses SVM in addition to Grid search cross validation
     Notice that this is time consuming
     '''
-    print "This is the use_svm() method"
+    print "This is the useSVM() method"
     print '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n'
     from sklearn import svm
     from sklearn.metrics import precision_recall_fscore_support
@@ -507,7 +319,7 @@ def use_svm():
     print 'best score = ', clf.best_score_
     print 'best index = ', clf.best_index_
 
-def use_pca_knearst():
+def usePCAKnearst():
     '''
     This function uses Knearst with PCA piped to Grid search cross validation
     
@@ -542,7 +354,7 @@ def use_pca_knearst():
     print precision_score(labels_test, pred), 'is the precision'
 
 
-def use_pca_svm():
+def usePCA_SVM():
     '''
     This function uses SVM and PCA piped to Grid search cross validation
     '''
@@ -579,7 +391,7 @@ def use_pca_svm():
     print recall_score(labels_test,pred), ' is the recall'
     print precision_score(labels_test, pred), 'is the precision'
 
-def use_pca_dtc():
+def usePCA_DTC():
     '''
     This methos use the Decision tree classifir with PCA.
     '''
@@ -718,7 +530,6 @@ precision = precision_score(labels_test, pred)
 sep("*", "The classifier result")
 print recall, ' is the recall'
 print precision, 'is the precision'
-print "\n\n\n"
  
 
 '''
@@ -779,115 +590,12 @@ dump_classifier_and_data(clf, my_dataset, features_list)
 #************** TRY UNCOMMENTING EVERY METHOD BELOW *******************
 #************** THIS WILL SHOW DIFFERENT CLASSIFIERS TRIALS **************
 
-#use_decision_tree_clf()
+#useDTClf()
 
-#use_svm()
+#useSVM()
 
-#use_pca_knearst()
+#usePCAKnearst()
 
-#use_pca_svm()
+#usePCA_SVM()
 
-#use_pca_dtc()
-
-
-
-
-# ***********************************
-
-# The following part is for the second submission when the reviewer asked me to show that 
-# I have tuned 3 params with their results
-
-
-# ***********************************
-
-tunerList =[]
-
-def use_decision_tree_clf_manual_tuning(p,a):
-    '''
-    This function uses Decision tree classifier with manual param tuning to find best result
-    You may think of it as manual GridSearch
-
-    This function will prenet the parameter used and the recall and precision ONLY and ONLY if 
-    they are above 0.3 for both.
-    
-    '''
-    
-    from sklearn import tree
-    from sklearn.tree import DecisionTreeClassifier 
-    from sklearn.metrics import precision_recall_fscore_support
-
-
-    clf = DecisionTreeClassifier(min_samples_leaf=p[0],max_depth=p[1],min_samples_split=p[2])
-
-    clf.fit(features_train,labels_train)
-
-    pred = clf.predict(features_test)
-
-    score = accuracy_score(labels_test,pred)
-
-    prec_reca_f = precision_recall_fscore_support(labels_test,pred)
-
-    thisPrecision = prec_reca_f[0][1]
-    thisRecall = prec_reca_f[1][1]
-
-
-
-#just log the settings where reall and precision are more than 0.3 for both
-    if (thisPrecision > 0.3 and thisRecall>0.3):
-        # print a
-        # print 'recall = ', thisRecall
-        # print 'precision = ', thisPrecision
-        # print("\n\n************\n\n")
-        tunerList.append([p[0],p[1],p[2],round(thisRecall,2),round(thisPrecision,2)])
-
-
-
-    
-
-def test_param_tuning():
-    
-    '''
-    This funcition prepare the parameters and use them in the function use_decision_tree_clf_manual_tuning()
-
-    '''
-    comma = ' , '
-    m1 = 'min_samples_split='
-    m2 = 'max_depth='
-    m3 = 'min_samples_leaf='
-
-
-    for f1 in range(1,10):
-        for f2 in range(1,10):
-            for f3 in range(2,10):
-                a = m1 + str(f1)+ comma + m2 + str(f2) + comma + m3 + str(f3)
-                #print (a)
-                p = [f1,f2,f3]
-                use_decision_tree_clf_manual_tuning(p,a)
-                
-
-
-test_param_tuning()
-
-
-# print the params values and recall and precision
-for i in tunerList:
-    print i
-
-
-
-# here I will group them to see which paramtuning is most effective
-# it showed that the most important param is min_samples_leaf when it ranges between 4 to 6.
-tuner_df = pd.DataFrame(tunerList)
-
-print tuner_df.columns
-grouped_df_first_third = tuner_df.groupby([0,2]).count()
-grouped_df_first_second = tuner_df.groupby([0,1]).count()
-grouped_df_second_third = tuner_df.groupby([1,2]).count()
-#print grouped_df_first_second
-print grouped_df_first_third
-#print grouped_df_second_third
-
-
-# grouped_df_first_second.to_csv('tuner1st2nd.csv')
-# grouped_df_first_third.to_csv('tuner1st3rd.csv')
-# grouped_df_second_third.to_csv('tuner2nd3rd.csv')
+#usePCA_DTC()
